@@ -6,7 +6,7 @@ class Questionario extends StatelessWidget {
   //Parametros públicos com "final"
   final List<Map<String, Object>> perguntas;
   final int perguntaSelecionada;
-  final void Function() quandoResponder;
+  final void Function(int) quandoResponder;
 
   //Construtor nomeado
   // ignore: use_key_in_widget_constructors
@@ -28,9 +28,12 @@ class Questionario extends StatelessWidget {
     return Column(
       children: <Widget>[
         Questao(perguntas[perguntaSelecionada]['texto'].toString()),
-        ...respostas
-            .map((resp) => Resposta(resp['texto'].toString(), quandoResponder))
-            .toList(),
+        ...respostas.map((resp) {
+          return Resposta(
+            resp['texto'].toString(),
+            () => quandoResponder(int.parse(resp['pontuacao'].toString())),
+          );
+        }).toList(),
       ],
     );
   }
